@@ -1,0 +1,36 @@
+version: '3.7'
+
+networks:
+  default:
+    name: kitcast-test-network
+
+services:
+  kitcast-test-backend:
+    image: kitcast-test-backend-image
+    container_name: kitcast-test-backend
+    logging: &default-logging
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "20m"
+    restart: always
+    environment:
+      - PORT=${KITCAST_TEST_BACKEND_PORT:-3000}
+      - REDIS_HOST=kitcast-test-redis
+      - REDIS_PORT=6379
+      - WORKERS_NUMBER=${WORKERS_NUMBER:-5}
+      - TASK_LOGGING_FILE=./data/tasks-output.log
+      - TZ=${TIMEZONE}
+    volumes:
+      - ./system/backend-data:/home/node/app/data
+
+  kitcast-test-redis:
+    image: redis:6.2.5-alpine
+    container_name: kitcast-test-redis
+    logging: *default-logging
+    restart: always
+    command: redis-server --appendonly yes
+    environment:
+      - TZ=${TIMEZONE}
+    volumes:
+      - ./system/redis:/data

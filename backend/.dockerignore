@@ -1,0 +1,8 @@
+node_modules
+.dockerignore
+.eslintignore
+.eslintrc.js
+.prettierignore
+.prettierrc.json
+.Dockerfile
+tsconfig.eslint.json

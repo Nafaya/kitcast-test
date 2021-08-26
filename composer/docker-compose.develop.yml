@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  kitcast-test-backend:
+    restart: "no"
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+      target: dev
+    environment:
+      - NODE_ENV=development
+      - LOGGER_PRETTY=true
+    ports:
+      - ${KITCAST_TEST_BACKEND_PORT:-3000}:${KITCAST_TEST_BACKEND_PORT:-3000}
+    volumes:
+      - ../backend:/home/node/app
+      - /home/node/app/node_modules
+
+  kitcast-test-redis:
+    restart: "no"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ../backend:/home/node/app
+      - /home/node/app/node_modules
+
